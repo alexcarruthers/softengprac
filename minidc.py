@@ -1,3 +1,4 @@
+import sys
 class minidc:
     def __init__(self):
         self.nums = []
@@ -60,11 +61,15 @@ class minidc:
         #print the number to stdout
         print topnum
 
+    #pops the top number off the stack and prints it out
     def command_n(self):
-        pass
+        print self.nums.pop()
 
+    #prints the entire stack without altering it
     def command_f(self):
-        pass
+        for num in reversed(self.nums):
+            sys.stdout.write(str(num) + ' ')
+        sys.stdout.write('\n')
 
     def execute_line(self):
         pass

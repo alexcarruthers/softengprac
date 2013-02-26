@@ -100,4 +100,54 @@ class test_minidc(unittest.TestCase):
         #assert that the value printed is the values pushed
         self.assertEqual(printed, "4\n")
 
+    #test the n command with valid domain logic
+    def test_command_n_domain_correct(self):
+        #create a calculator
+        calc = minidc()
+        #push a 10 onto the stack
+        calc.push_number(10)
+        #redirect system.out to something we can read
+        stdout_temp = sys.stdout
+        out = StringIO.StringIO()
+        sys.stdout = out
+
+        try:
+            #run the n command
+            calc.command_n()
+            #get the value printed
+            printed = out.getvalue()
+        finally:
+            #restore stdout
+            sys.stdout = stdout_temp
+        #assert that the stack length has decremented
+        self.assertEqual(len(calc.nums), 0)
+        #assert that the value printed is the values pushed
+        self.assertEqual(printed, "10\n")
+
+    #test the f command with valid domain logic
+    def test_command_f_domain_correct(self):
+        #create a calculator
+        calc = minidc()
+        #push a bunch of numbers onto the stack
+        calc.push_number(10)
+        calc.push_number(5)
+        calc.push_number(3)
+        #redirect system.out to something we can read
+        stdout_temp = sys.stdout
+        out = StringIO.StringIO()
+        sys.stdout = out
+
+        try:
+            #run the f command
+            calc.command_f()
+            #get the value printed
+            printed = out.getvalue()
+        finally:
+            #restore stdout
+            sys.stdout = stdout_temp
+        #assert that the stack length hasn't changed
+        self.assertEqual(len(calc.nums), 3)
+        #assert that the values printed are the values pushed
+        self.assertEqual(printed, "3 5 10 \n")
+
 unittest.TextTestRunner(verbosity=2).run(unittest.TestLoader().loadTestsFromTestCase(test_minidc))
