@@ -1,0 +1,52 @@
+Here’s the failing test:
+    #test divide with valid domain logic
+    def test_divide_domain_correct(self):
+        #create a calculator
+        calc = minidc()
+        #push a 15 onto the stack
+        calc.push_number(15)
+        #push a 3 onto the stack
+        calc.push_number(3)
+        #divide the numbers
+        calc.divide()
+        #make sure the stack has length 1
+        self.assertEqual(len(calc.nums), 1)
+        #make sure value on stack is 5
+        self.assertEqual(calc.nums.pop(), 5)
+Here’s proof that the test failed:
+    test_add_domain_correct (__main__.test_minidc) ... ok
+    test_divide_domain_correct (__main__.test_minidc) ... FAIL
+    test_multiply_domain_correct (__main__.test_minidc) ... ok
+    test_push_number_domain_correct (__main__.test_minidc) ... ok
+    test_subtract_domain_correct (__main__.test_minidc) ... ok
+    =================================================================
+    FAIL: test_divide_domain_correct (__main__.test_minidc)
+    -----------------------------------------------------------------
+    Traceback (most recent call last):
+      File "C:\Users\Alex\PycharmProjects\minidc\test_minidc.py", line 72, in test_divide_domain_correct
+        self.assertEqual(len(calc.nums), 1)
+    AssertionError: 2 != 1
+    -----------------------------------------------------------------
+    Ran 5 tests in 0.001s
+    FAILED (failures=1)
+    Process finished with exit code 0
+Here’s the code that passes the test:
+    #pops two top numbers off the stack and divides the second
+    #by the first and pushes the result back onto the stack
+    def divide(self):
+        #pop the first number off the stack
+        num1 = self.nums.pop()
+        #pop the second number off the stack
+        num2 = self.nums.pop()
+        #divide num2 by num1 and push the result back onto the stack
+        self.nums.append(num2 / num1)
+And here’s the test passing:
+    test_add_domain_correct (__main__.test_minidc) ... ok
+    test_divide_domain_correct (__main__.test_minidc) ... ok
+    test_multiply_domain_correct (__main__.test_minidc) ... ok
+    test_push_number_domain_correct (__main__.test_minidc) ... ok
+    test_subtract_domain_correct (__main__.test_minidc) ... ok
+    -----------------------------------------------------------------
+    Ran 5 tests in 0.001s
+    OK
+    Process finished with exit code 0

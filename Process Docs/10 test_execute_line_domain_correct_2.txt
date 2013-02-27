@@ -1,0 +1,87 @@
+Here's the failing test:
+    #tests to make sure command_f, command_p and command_n are processed properly
+    def test_execute_line_domain_correct_2(self):
+        #create a calculator
+        calc = minidc()
+        #redirect stdout to something we can read
+        stdout_temp = sys.stdout
+        out = StringIO.StringIO()
+        sys.stdout = out
+
+        try:
+            #run a command (including command_f, command_p and command_n
+            calc.execute_line('5.2 _3 f n p')
+            #get the value printed
+            printed = out.getvalue()
+        finally:
+            #restore stdout
+            sys.stdout = stdout_temp
+        self.assertEqual(printed, '-3 5.2 \n-3\n5.2\n')
+        self.assertEqual(len(calc.nums), 1)
+Here's the test failing:
+    test_add_domain_correct (__main__.test_minidc) ... ok
+    test_command_f_domain_correct (__main__.test_minidc) ... ok
+    test_command_n_domain_correct (__main__.test_minidc) ... ok
+    test_command_p_domain_correct (__main__.test_minidc) ... ok
+    test_divide_domain_correct (__main__.test_minidc) ... ok
+    test_execute_line_domain_correct_1 (__main__.test_minidc) ... ok
+    test_execute_line_domain_correct_2 (__main__.test_minidc) ... FAIL
+    test_multiply_domain_correct (__main__.test_minidc) ... ok
+    test_push_number_domain_correct (__main__.test_minidc) ... ok
+    test_subtract_domain_correct (__main__.test_minidc) ... ok
+    ======================================================================
+    FAIL: test_execute_line_domain_correct_2 (__main__.test_minidc)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "V:/softengprac/test_minidc.py", line 182, in test_execute_line_domain_correct_2
+        self.assertEqual(printed, '-3 5.2 \n-3\n5.2\n')
+    AssertionError: '' != '-3 5.2 \n-3\n5.2\n'
+    ----------------------------------------------------------------------
+    Ran 10 tests in 0.003s
+    FAILED (failures=1)
+    Process finished with exit code 0
+Here's the code that passes the test:
+    #takes a line of commands and executes them
+    def execute_line(self, line):
+        #small function to check if a string is a number (int or float)
+        def is_number(s):
+            try:
+                float(s)
+            except ValueError:
+                return False
+            return True
+        line = line.split(' ')
+        for i in line:
+            if i == '+':
+                self.add()
+            elif i == '-':
+                self.subtract()
+            elif i == '*':
+                self.multiply()
+            elif i == '/':
+                self.divide()
+            elif i == 'n':
+                self.command_n()
+            elif i == 'f':
+                self.command_f()
+            elif i == 'p':
+                self.command_p()
+            elif is_number(i):
+                self.push_number(float(i))
+            elif i[0] == '_' and is_number(i[1:]):
+                self.push_number(float('-' + i[1:]))
+Here's the code passing:
+    test_add_domain_correct (__main__.test_minidc) ... ok
+    test_command_f_domain_correct (__main__.test_minidc) ... ok
+    test_command_n_domain_correct (__main__.test_minidc) ... ok
+    test_command_p_domain_correct (__main__.test_minidc) ... ok
+    test_divide_domain_correct (__main__.test_minidc) ... ok
+    test_execute_line_domain_correct_1 (__main__.test_minidc) ... ok
+    test_execute_line_domain_correct_2 (__main__.test_minidc) ... ok
+    test_multiply_domain_correct (__main__.test_minidc) ... ok
+    test_push_number_domain_correct (__main__.test_minidc) ... ok
+    test_subtract_domain_correct (__main__.test_minidc) ... ok
+    ----------------------------------------------------------------------
+    Ran 10 tests in 0.001s
+    OK
+    Process finished with exit code 0

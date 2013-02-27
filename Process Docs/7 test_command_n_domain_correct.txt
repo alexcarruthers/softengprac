@@ -1,0 +1,58 @@
+Here’s the failing test:
+    #test the n command with valid domain logic
+    def test_command_n_domain_correct(self):
+        #create a calculator
+        calc = minidc()
+        #push a 10 onto the stack
+        calc.push_number(10)
+        #redirect stdout to something we can read
+        stdout_temp = sys.stdout
+        out = StringIO.StringIO()
+        sys.stdout = out
+        try:
+            #run the n command
+            calc.command_n()
+            #get the value printed
+            printed = out.getvalue()
+        finally:
+            #restore stdout
+            sys.stdout = stdout_temp
+        #assert that the stack length has decremented
+        self.assertEqual(len(calc.nums), 0)
+        #assert that the value printed is the values pushed
+        self.assertEqual(printed, "10\n")
+Here’s the test failing:
+    test_add_domain_correct (test_minidc.test_minidc) ... ok
+    test_command_n_domain_correct (test_minidc.test_minidc) ... FAIL
+    test_command_p_domain_correct (test_minidc.test_minidc) ... ok
+    test_divide_domain_correct (test_minidc.test_minidc) ... ok
+    test_multiply_domain_correct (test_minidc.test_minidc) ... ok
+    test_push_number_domain_correct (test_minidc.test_minidc) ... ok
+    test_subtract_domain_correct (test_minidc.test_minidc) ... ok
+    =================================================================
+    FAIL: test_command_n_domain_correct (test_minidc.test_minidc)
+    -----------------------------------------------------------------
+    Traceback (most recent call last):
+      File "V:/softengprac/test_minidc.py", line 123, in test_command_n_domain_correct
+        self.assertEqual(len(calc.nums), 0)
+    AssertionError: 1 != 0
+    -----------------------------------------------------------------
+    Ran 7 tests in 0.004s
+    FAILED (failures=1)
+    Process finished with exit code 0
+Here’s the code that passes the test:
+    #pops the top number off the stack and prints it out, stripping trailing zeroes
+    def command_n(self):
+        print '{0:g}'.format(float(self.nums.pop()))
+Here’s the test passing:
+    test_add_domain_correct (test_minidc.test_minidc) ... ok
+    test_command_n_domain_correct (test_minidc.test_minidc) ... ok
+    test_command_p_domain_correct (test_minidc.test_minidc) ... ok
+    test_divide_domain_correct (test_minidc.test_minidc) ... ok
+    test_multiply_domain_correct (test_minidc.test_minidc) ... ok
+    test_push_number_domain_correct (test_minidc.test_minidc) ... ok
+    test_subtract_domain_correct (test_minidc.test_minidc) ... ok
+    -----------------------------------------------------------------
+    Ran 7 tests in 0.000s
+    OK
+    Process finished with exit code 0

@@ -1,0 +1,47 @@
+Here’s the test:
+    #test add with valid domain logic
+    def test_add_domain_correct(self):
+        #create a calculator
+        calc = minidc()
+        #push a 3 onto the stack
+        calc.push_number(3)
+        #push a 5 onto the stack
+        calc.push_number(5)
+        #add the two numbers together
+        calc.add()
+        #check to make sure the stack has length 1
+        self.assertEqual(len(calc.nums), 1)
+        #check to make sure the value on the stack is 8
+        self.assertEqual(calc.nums.pop(), 8)
+Here’s the test failing:
+    test_add_domain_correct (__main__.test_minidc) ... FAIL
+    test_push_number_domain_correct (__main__.test_minidc) ... ok
+    =================================================================
+    FAIL: test_add_domain_correct (__main__.test_minidc)
+    -----------------------------------------------------------------
+    Traceback (most recent call last):
+      File "C:\Users\Alex\PycharmProjects\minidc\test_minidc.py", line 27, in test_add_domain_correct
+        self.assertEqual(len(calc.nums), 1)
+    AssertionError: 2 != 1
+    -----------------------------------------------------------------
+    Ran 2 tests in 0.001s
+    FAILED (failures=1)
+    Process finished with exit code 0
+Here’s the code that passes this test:
+    #pops the top two numbers off of the stack, adds them
+    #and pushes it back onto the stack
+    def add(self):
+        #pop the first number off the stack
+        num1 = self.nums.pop()
+        #pop the second number off the stack
+        num2 = self.nums.pop()
+        #add the numbers and pop the result back onto
+        #the stack
+        self.nums.append(num1 + num2)
+Here’s the test passing:
+    test_add_domain_correct (__main__.test_minidc) ... ok
+    test_push_number_domain_correct (__main__.test_minidc) ... ok
+    -----------------------------------------------------------------
+    Ran 2 tests in 0.000s
+    OK
+    Process finished with exit code 0

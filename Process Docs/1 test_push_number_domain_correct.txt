@@ -1,0 +1,37 @@
+Here’s the test:
+    #test push_number with valid domain logic
+    def test_push_number_domain_correct(self):
+        #create a calculator
+        calc = minidc()
+        #push number 5 on the stack
+        calc.push_number(5)
+        #check to make sure the stack has length 1
+        self.assertEqual(len(calc.nums), 1)
+        #check to make sure the (only) number on the stack is 5
+        self.assertEqual(calc.nums.pop(), 5)
+And here’s what happens when the test is run:
+    C:\Python27\python.exe C:\Users\Alex\PycharmProjects\minidc\test_minidc.py
+    test_push_number_domain_correct (__main__.test_minidc) ... FAIL
+    =================================================================
+    FAIL: test_push_number_domain_correct (__main__.test_minidc)
+    -----------------------------------------------------------------
+    Traceback (most recent call last):
+      File "C:\Users\Alex\PycharmProjects\minidc\test_minidc.py", line 12, in test_push_number_domain_correct
+        self.assertEqual(len(calc.nums), 1)
+    AssertionError: 0 != 1
+    -----------------------------------------------------------------
+    Ran 1 test in 0.091s
+    FAILED (failures=1)
+    Process finished with exit code 0
+We can now write the code for this function:
+    #Takes a number and push it onto the stack so that
+    #it can be stored for future computation
+    def push_number(self, num):
+        #push number onto the stack
+        self.nums.append(num)     
+And the test passes
+    test_push_number_domain_correct (__main__.test_minidc) ... ok
+    -----------------------------------------------------------------
+    Ran 1 test in 0.001s
+    OK
+    Process finished with exit code 0
