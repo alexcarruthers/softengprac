@@ -1,6 +1,6 @@
 Here's the failing test:
-    #test the add function with just 1 value on the stack
-    def test_add_domain_incorrect(self):
+    #test the subtract function with just 1 value on the stack
+    def test_subtract_domain_incorrect(self):
         #create a calculator
         calc = minidc()
         #push 4 onto the stack
@@ -11,47 +11,46 @@ Here's the failing test:
         sys.stderr = out
 
         try:
-            #run the add command (with only 1 value)
-            calc.add()
+            #run the subtract command (with only 1 value)
+            calc.subtract()
             #get the value printed
             printed = out.getvalue()
         finally:
             #restore stdout
             sys.stderr = stderr_temp
         self.assertEqual(len(calc.nums), 1)
-        self.assertEqual(printed, 'Error: not enough values to add\n')
+        self.assertEqual(printed, 'Error: not enough values to subtract\n')
 Here's the test failing:
-    test_add_domain_correct (test_minidc.test_minidc) ... ok
-    test_add_domain_incorrect (test_minidc.test_minidc) ... ERROR
-    test_command_f_domain_correct (test_minidc.test_minidc) ... ok
-    test_command_n_domain_correct (test_minidc.test_minidc) ... ok
-    test_command_p_domain_correct (test_minidc.test_minidc) ... ok
-    test_divide_domain_correct (test_minidc.test_minidc) ... ok
-    test_execute_line_domain_correct_1 (test_minidc.test_minidc) ... ok
-    test_execute_line_domain_correct_2 (test_minidc.test_minidc) ... ok
-    test_multiply_domain_correct (test_minidc.test_minidc) ... ok
-    test_push_number_domain_correct (test_minidc.test_minidc) ... ok
-    test_subtract_domain_correct (test_minidc.test_minidc) ... ok
+    test_add_domain_correct (__main__.test_minidc) ... ok
+    test_add_domain_incorrect (__main__.test_minidc) ... ok
+    test_command_f_domain_correct (__main__.test_minidc) ... ok
+    test_command_n_domain_correct (__main__.test_minidc) ... ok
+    test_command_p_domain_correct (__main__.test_minidc) ... ok
+    test_divide_domain_correct (__main__.test_minidc) ... ok
+    test_multiply_domain_correct (__main__.test_minidc) ... ok
+    test_push_number_domain_correct (__main__.test_minidc) ... ok
+    test_subtract_domain_correct (__main__.test_minidc) ... ok
+    test_subtract_domain_incorrect (__main__.test_minidc) ... ERROR
     ======================================================================
-    ERROR: test_add_domain_incorrect (test_minidc.test_minidc)
+    ERROR: test_subtract_domain_incorrect (__main__.test_minidc)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-      File "V:/softengprac/test_minidc.py", line 195, in test_add_domain_incorrect
-        calc.add()
-      File "V:\softengprac\minidc.py", line 18, in add
+      File "V:/softengprac/test_minidc.py", line 220, in test_subtract_domain_incorrect
+        calc.subtract()
+      File "V:\softengprac\minidc.py", line 33, in subtract
         num2 = self.nums.pop()
     IndexError: pop from empty list
     ----------------------------------------------------------------------
-    Ran 11 tests in 0.005s
+    Ran 10 tests in 0.005s
     FAILED (errors=1)
     Process finished with exit code 0
-Here's the edited code that passes the test:
-    #pops the top two numbers off of the stack, adds them
-    #and pushes it back onto the stack
-    def add(self):
+Here's the code that passes the test:
+    #pops the top two numbers off of the stack, subtracts one
+    #from the other and pushes it back onto the stack
+    def subtract(self):
         #make sure there are at least two numbers on the stack
         if len(self.nums) < 2:
-            sys.stderr.write('Error: not enough values to add\n')
+            sys.stderr.write('Error: not enough values to subtract\n')
         else:
             #pop the first number off the stack
             num1 = self.nums.pop()
@@ -59,7 +58,7 @@ Here's the edited code that passes the test:
             num2 = self.nums.pop()
             #add the numbers and pop the result back onto
             #the stack
-            self.nums.append(num1 + num2)
+            self.nums.append(num2 - num1)
 Here's the test passing:
     test_add_domain_correct (__main__.test_minidc) ... ok
     test_add_domain_incorrect (__main__.test_minidc) ... ok
@@ -67,12 +66,11 @@ Here's the test passing:
     test_command_n_domain_correct (__main__.test_minidc) ... ok
     test_command_p_domain_correct (__main__.test_minidc) ... ok
     test_divide_domain_correct (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_1 (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_2 (__main__.test_minidc) ... ok
     test_multiply_domain_correct (__main__.test_minidc) ... ok
     test_push_number_domain_correct (__main__.test_minidc) ... ok
     test_subtract_domain_correct (__main__.test_minidc) ... ok
+    test_subtract_domain_incorrect (__main__.test_minidc) ... ok
     ----------------------------------------------------------------------
-    Ran 11 tests in 0.001s
+    Ran 10 tests in 0.002s
     OK
     Process finished with exit code 0

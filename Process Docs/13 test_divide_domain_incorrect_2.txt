@@ -1,10 +1,12 @@
 Here's the failing test:
-    #test the divide function with just 1 value on the stack
-    def test_divide_domain_incorrect_1(self):
+    #test the divide function dividing by zero
+    def test_divide_domain_incorrect_2(self):
         #create a calculator
         calc = minidc()
         #push 4 onto the stack
         calc.push_number(4)
+        #push 0 onto the stack
+        calc.push_number(0)
         #redirect stderr to something we can read
         stderr_temp = sys.stdout
         out = StringIO.StringIO()
@@ -18,8 +20,7 @@ Here's the failing test:
         finally:
             #restore stdout
             sys.stderr = stderr_temp
-        self.assertEqual(len(calc.nums), 1)
-        self.assertEqual(printed, 'Error: not enough values to divide\n')
+        self.assertEqual(printed, 'Error: divide by 0\n')
 Here's the test failing:
     test_add_domain_correct (__main__.test_minidc) ... ok
     test_add_domain_incorrect (__main__.test_minidc) ... ok
@@ -27,25 +28,24 @@ Here's the test failing:
     test_command_n_domain_correct (__main__.test_minidc) ... ok
     test_command_p_domain_correct (__main__.test_minidc) ... ok
     test_divide_domain_correct (__main__.test_minidc) ... ok
-    test_divide_domain_incorrect_1 (__main__.test_minidc) ... ERROR
-    test_execute_line_domain_correct_1 (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_2 (__main__.test_minidc) ... ok
+    test_divide_domain_incorrect_1 (__main__.test_minidc) ... ok
+    test_divide_domain_incorrect_2 (__main__.test_minidc) ... ERROR
     test_multiply_domain_correct (__main__.test_minidc) ... ok
     test_multiply_domain_incorrect (__main__.test_minidc) ... ok
     test_push_number_domain_correct (__main__.test_minidc) ... ok
     test_subtract_domain_correct (__main__.test_minidc) ... ok
     test_subtract_domain_incorrect (__main__.test_minidc) ... ok
     ======================================================================
-    ERROR: test_divide_domain_incorrect (__main__.test_minidc)
+    ERROR: test_divide_domain_incorrect_2 (__main__.test_minidc)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-      File "V:/softengprac/test_minidc.py", line 264, in test_divide_domain_incorrect
+      File "V:/softengprac/test_minidc.py", line 288, in test_divide_domain_incorrect_2
         calc.divide()
-      File "V:\softengprac\minidc.py", line 63, in divide
-        num2 = self.nums.pop()
-    IndexError: pop from empty list
+      File "V:\softengprac\minidc.py", line 69, in divide
+        self.nums.append(num2 / num1)
+    ZeroDivisionError: integer division or modulo by zero
     ----------------------------------------------------------------------
-    Ran 14 tests in 0.006s
+    Ran 13 tests in 0.009s
     FAILED (errors=1)
     Process finished with exit code 0
 Here's the code that passes the test:
@@ -58,6 +58,9 @@ Here's the code that passes the test:
         else:
             #pop the first number off the stack
             num1 = self.nums.pop()
+            if num1 == 0:
+                sys.stderr.write('Error: divide by 0\n')
+                return
             #pop the second number off the stack
             num2 = self.nums.pop()
             #divide num2 by num1 and push the result back onto the stack
@@ -70,14 +73,13 @@ Here's the test passing:
     test_command_p_domain_correct (__main__.test_minidc) ... ok
     test_divide_domain_correct (__main__.test_minidc) ... ok
     test_divide_domain_incorrect_1 (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_1 (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_2 (__main__.test_minidc) ... ok
+    test_divide_domain_incorrect_2 (__main__.test_minidc) ... ok
     test_multiply_domain_correct (__main__.test_minidc) ... ok
     test_multiply_domain_incorrect (__main__.test_minidc) ... ok
     test_push_number_domain_correct (__main__.test_minidc) ... ok
     test_subtract_domain_correct (__main__.test_minidc) ... ok
     test_subtract_domain_incorrect (__main__.test_minidc) ... ok
     ----------------------------------------------------------------------
-    Ran 14 tests in 0.001s
+    Ran 13 tests in 0.001s
     OK
     Process finished with exit code 0

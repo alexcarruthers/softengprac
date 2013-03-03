@@ -27,8 +27,6 @@ Here's the test failing:
     test_command_n_domain_correct (__main__.test_minidc) ... ok
     test_command_p_domain_correct (__main__.test_minidc) ... ok
     test_divide_domain_correct (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_1 (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_2 (__main__.test_minidc) ... ok
     test_multiply_domain_correct (__main__.test_minidc) ... ok
     test_multiply_domain_incorrect (__main__.test_minidc) ... ERROR
     test_push_number_domain_correct (__main__.test_minidc) ... ok
@@ -44,7 +42,7 @@ Here's the test failing:
         num2 = self.nums.pop()
     IndexError: pop from empty list
     ----------------------------------------------------------------------
-    Ran 13 tests in 0.006s
+    Ran 11 tests in 0.006s
     FAILED (errors=1)
     Process finished with exit code 0
 Here's the code that passes the test:
@@ -69,14 +67,12 @@ Here's the test passing:
     test_command_n_domain_correct (__main__.test_minidc) ... ok
     test_command_p_domain_correct (__main__.test_minidc) ... ok
     test_divide_domain_correct (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_1 (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_2 (__main__.test_minidc) ... ok
     test_multiply_domain_correct (__main__.test_minidc) ... ok
     test_multiply_domain_incorrect (__main__.test_minidc) ... ok
     test_push_number_domain_correct (__main__.test_minidc) ... ok
     test_subtract_domain_correct (__main__.test_minidc) ... ok
     test_subtract_domain_incorrect (__main__.test_minidc) ... ok
     ----------------------------------------------------------------------
-    Ran 13 tests in 0.001s
+    Ran 11 tests in 0.001s
     OK
     Process finished with exit code 0

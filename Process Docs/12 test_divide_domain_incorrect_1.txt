@@ -1,8 +1,10 @@
 Here's the failing test:
-    #test the command_n function empty stack
-    def test_command_n_domain_incorrect(self):
+    #test the divide function with just 1 value on the stack
+    def test_divide_domain_incorrect_1(self):
         #create a calculator
         calc = minidc()
+        #push 4 onto the stack
+        calc.push_number(4)
         #redirect stderr to something we can read
         stderr_temp = sys.stdout
         out = StringIO.StringIO()
@@ -10,70 +12,68 @@ Here's the failing test:
 
         try:
             #run the divide command (with only 1 value)
-            calc.command_n()
+            calc.divide()
             #get the value printed
             printed = out.getvalue()
         finally:
             #restore stdout
             sys.stderr = stderr_temp
-        self.assertEqual(printed, 'Error: empty stack\n')
+        self.assertEqual(len(calc.nums), 1)
+        self.assertEqual(printed, 'Error: not enough values to divide\n')
 Here's the test failing:
     test_add_domain_correct (__main__.test_minidc) ... ok
     test_add_domain_incorrect (__main__.test_minidc) ... ok
     test_command_f_domain_correct (__main__.test_minidc) ... ok
     test_command_n_domain_correct (__main__.test_minidc) ... ok
-    test_command_n_domain_incorrect (__main__.test_minidc) ... ERROR
     test_command_p_domain_correct (__main__.test_minidc) ... ok
-    test_command_p_domain_incorrect (__main__.test_minidc) ... ok
     test_divide_domain_correct (__main__.test_minidc) ... ok
-    test_divide_domain_incorrect_1 (__main__.test_minidc) ... ok
-    test_divide_domain_incorrect_2 (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_1 (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_2 (__main__.test_minidc) ... ok
+    test_divide_domain_incorrect_1 (__main__.test_minidc) ... ERROR
     test_multiply_domain_correct (__main__.test_minidc) ... ok
     test_multiply_domain_incorrect (__main__.test_minidc) ... ok
     test_push_number_domain_correct (__main__.test_minidc) ... ok
     test_subtract_domain_correct (__main__.test_minidc) ... ok
     test_subtract_domain_incorrect (__main__.test_minidc) ... ok
     ======================================================================
-    ERROR: test_command_n_domain_incorrect (__main__.test_minidc)
+    ERROR: test_divide_domain_incorrect (__main__.test_minidc)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-      File "V:/softengprac/test_minidc.py", line 326, in test_command_n_domain_incorrect
-        calc.command_n()
-      File "V:\softengprac\minidc.py", line 88, in command_n
-        print '{0:g}'.format(float(self.nums.pop()))
+      File "V:/softengprac/test_minidc.py", line 264, in test_divide_domain_incorrect
+        calc.divide()
+      File "V:\softengprac\minidc.py", line 63, in divide
+        num2 = self.nums.pop()
     IndexError: pop from empty list
     ----------------------------------------------------------------------
-    Ran 17 tests in 0.006s
+    Ran 12 tests in 0.006s
     FAILED (errors=1)
     Process finished with exit code 0
 Here's the code that passes the test:
-    #pops the top number off the stack and prints it out, stripping trailing zeroes
-    def command_n(self):
-        if len(self.nums) == 0:
-            sys.stderr.write('Error: empty stack\n')
-            return
-        print '{0:g}'.format(float(self.nums.pop()))
+    #pops two top numbers off the stack and divides the second
+    #by the first and pushes the result back onto the stack
+    def divide(self):
+        #make sure there are at least two numbers on the stack
+        if len(self.nums) < 2:
+            sys.stderr.write('Error: not enough values to divide\n')
+        else:
+            #pop the first number off the stack
+            num1 = self.nums.pop()
+            #pop the second number off the stack
+            num2 = self.nums.pop()
+            #divide num2 by num1 and push the result back onto the stack
+            self.nums.append(num2 / num1)
 Here's the test passing:
     test_add_domain_correct (__main__.test_minidc) ... ok
     test_add_domain_incorrect (__main__.test_minidc) ... ok
     test_command_f_domain_correct (__main__.test_minidc) ... ok
     test_command_n_domain_correct (__main__.test_minidc) ... ok
-    test_command_n_domain_incorrect (__main__.test_minidc) ... ok
     test_command_p_domain_correct (__main__.test_minidc) ... ok
-    test_command_p_domain_incorrect (__main__.test_minidc) ... ok
     test_divide_domain_correct (__main__.test_minidc) ... ok
     test_divide_domain_incorrect_1 (__main__.test_minidc) ... ok
-    test_divide_domain_incorrect_2 (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_1 (__main__.test_minidc) ... ok
-    test_execute_line_domain_correct_2 (__main__.test_minidc) ... ok
     test_multiply_domain_correct (__main__.test_minidc) ... ok
     test_multiply_domain_incorrect (__main__.test_minidc) ... ok
     test_push_number_domain_correct (__main__.test_minidc) ... ok
     test_subtract_domain_correct (__main__.test_minidc) ... ok
     test_subtract_domain_incorrect (__main__.test_minidc) ... ok
     ----------------------------------------------------------------------
-    Ran 17 tests in 0.001s
+    Ran 12 tests in 0.001s
     OK
     Process finished with exit code 0
