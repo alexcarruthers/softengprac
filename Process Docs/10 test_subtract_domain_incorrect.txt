@@ -12,8 +12,11 @@ Here's the failing test:
 
         try:
             #run the subtract command (with only 1 value)
-            calc.subtract()
-            #get the value printed
+            try:
+                calc.subtract()
+            except ArithmeticError:
+                pass
+                #get the value printed
             printed = out.getvalue()
         finally:
             #restore stdout
@@ -51,6 +54,7 @@ Here's the code that passes the test:
         #make sure there are at least two numbers on the stack
         if len(self.nums) < 2:
             sys.stderr.write('Error: not enough values to subtract\n')
+            raise ArithmeticError
         else:
             #pop the first number off the stack
             num1 = self.nums.pop()

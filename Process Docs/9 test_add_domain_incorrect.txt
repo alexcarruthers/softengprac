@@ -12,7 +12,10 @@ Here's the failing test:
 
         try:
             #run the add command (with only 1 value)
-            calc.add()
+            try:
+                calc.add()
+            except ArithmeticError:
+                pass
             #get the value printed
             printed = out.getvalue()
         finally:
@@ -50,6 +53,7 @@ Here's the edited code that passes the test:
         #make sure there are at least two numbers on the stack
         if len(self.nums) < 2:
             sys.stderr.write('Error: not enough values to add\n')
+            raise ArithmeticError
         else:
             #pop the first number off the stack
             num1 = self.nums.pop()

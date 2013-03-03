@@ -1,5 +1,6 @@
 Here's the failing test:
     #test the divide function with just 1 value on the stack
+   #test the divide function with just 1 value on the stack
     def test_divide_domain_incorrect_1(self):
         #create a calculator
         calc = minidc()
@@ -12,7 +13,10 @@ Here's the failing test:
 
         try:
             #run the divide command (with only 1 value)
-            calc.divide()
+            try:
+                calc.divide()
+            except ArithmeticError:
+                pass
             #get the value printed
             printed = out.getvalue()
         finally:
@@ -53,10 +57,10 @@ Here's the code that passes the test:
         #make sure there are at least two numbers on the stack
         if len(self.nums) < 2:
             sys.stderr.write('Error: not enough values to divide\n')
+            raise ArithmeticError
         else:
             #pop the first number off the stack
             num1 = self.nums.pop()
-            #pop the second number off the stack
             num2 = self.nums.pop()
             #divide num2 by num1 and push the result back onto the stack
             self.nums.append(num2 / num1)

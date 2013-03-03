@@ -10,7 +10,10 @@ Here's the failing test:
 
         try:
             #run the divide command (with only 1 value)
-            calc.command_p()
+            try:
+                calc.command_p()
+            except Exception:
+                pass
             #get the value printed
             printed = out.getvalue()
         finally:
@@ -50,7 +53,7 @@ Here's the code that passes the test:
     def command_p(self):
         if len(self.nums) == 0:
             sys.stderr.write('Error: empty stack\n')
-            return
+            raise Exception
         #pop the top number off the stack
         topnum = self.nums.pop()
         #push it back onto the stack

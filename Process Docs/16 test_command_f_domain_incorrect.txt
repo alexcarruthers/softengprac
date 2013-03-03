@@ -10,7 +10,10 @@ Here's the failing test:
 
         try:
             #run the divide command (with only 1 value)
-            calc.command_f()
+            try:
+                calc.command_f()
+            except Exception:
+                pass
             #get the value printed
             printed = out.getvalue()
         finally:
@@ -50,7 +53,7 @@ Here's the code that passes the test:
     def command_f(self):
         if len(self.nums) == 0:
             sys.stderr.write('Error: empty stack\n')
-            return
+            raise Exception
         for num in reversed(self.nums):
             sys.stdout.write('{0:g}'.format(float(num)) + ' ')
         sys.stdout.write('\n')

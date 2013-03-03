@@ -14,7 +14,10 @@ Here's the failing test:
 
         try:
             #run the divide command (with only 1 value)
-            calc.divide()
+            try:
+                calc.divide()
+            except ArithmeticError:
+                pass
             #get the value printed
             printed = out.getvalue()
         finally:
@@ -55,13 +58,14 @@ Here's the code that passes the test:
         #make sure there are at least two numbers on the stack
         if len(self.nums) < 2:
             sys.stderr.write('Error: not enough values to divide\n')
+            raise ArithmeticError
         else:
             #pop the first number off the stack
             num1 = self.nums.pop()
             if num1 == 0:
                 sys.stderr.write('Error: divide by 0\n')
-                return
-            #pop the second number off the stack
+                raise ArithmeticError
+                #pop the second number off the stack
             num2 = self.nums.pop()
             #divide num2 by num1 and push the result back onto the stack
             self.nums.append(num2 / num1)

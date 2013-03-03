@@ -95,7 +95,7 @@ class test_minidc(unittest.TestCase):
         finally:
             #restore stdout
             sys.stdout = stdout_temp
-        #assert that the stack length hasn't changed
+            #assert that the stack length hasn't changed
         self.assertEqual(len(calc.nums), 1)
         #assert that the value printed is the values pushed
         self.assertEqual(printed, "4\n")
@@ -119,7 +119,7 @@ class test_minidc(unittest.TestCase):
         finally:
             #restore stdout
             sys.stdout = stdout_temp
-        #assert that the stack length has decremented
+            #assert that the stack length has decremented
         self.assertEqual(len(calc.nums), 0)
         #assert that the value printed is the values pushed
         self.assertEqual(printed, "10\n")
@@ -145,7 +145,7 @@ class test_minidc(unittest.TestCase):
         finally:
             #restore stdout
             sys.stdout = stdout_temp
-        #assert that the stack length hasn't changed
+            #assert that the stack length hasn't changed
         self.assertEqual(len(calc.nums), 3)
         #assert that the values printed are the values pushed
         self.assertEqual(printed, "3 5 10 \n")
@@ -163,8 +163,11 @@ class test_minidc(unittest.TestCase):
 
         try:
             #run the add command (with only 1 value)
-            calc.add()
-            #get the value printed
+            try:
+                calc.add()
+            except ArithmeticError:
+                pass
+                #get the value printed
             printed = out.getvalue()
         finally:
             #restore stdout
@@ -185,8 +188,11 @@ class test_minidc(unittest.TestCase):
 
         try:
             #run the subtract command (with only 1 value)
-            calc.subtract()
-            #get the value printed
+            try:
+                calc.subtract()
+            except ArithmeticError:
+                pass
+                #get the value printed
             printed = out.getvalue()
         finally:
             #restore stdout
@@ -207,8 +213,11 @@ class test_minidc(unittest.TestCase):
 
         try:
             #run the multiply command (with only 1 value)
-            calc.multiply()
-            #get the value printed
+            try:
+                calc.multiply()
+            except ArithmeticError:
+                pass
+                #get the value printed
             printed = out.getvalue()
         finally:
             #restore stdout
@@ -229,8 +238,11 @@ class test_minidc(unittest.TestCase):
 
         try:
             #run the divide command (with only 1 value)
-            calc.divide()
-            #get the value printed
+            try:
+                calc.divide()
+            except ArithmeticError:
+                pass
+                #get the value printed
             printed = out.getvalue()
         finally:
             #restore stdout
@@ -253,8 +265,11 @@ class test_minidc(unittest.TestCase):
 
         try:
             #run the divide command (with only 1 value)
-            calc.divide()
-            #get the value printed
+            try:
+                calc.divide()
+            except ArithmeticError:
+                pass
+                #get the value printed
             printed = out.getvalue()
         finally:
             #restore stdout
@@ -272,8 +287,11 @@ class test_minidc(unittest.TestCase):
 
         try:
             #run the divide command (with only 1 value)
-            calc.command_p()
-            #get the value printed
+            try:
+                calc.command_p()
+            except Exception:
+                pass
+                #get the value printed
             printed = out.getvalue()
         finally:
             #restore stdout
@@ -291,8 +309,11 @@ class test_minidc(unittest.TestCase):
 
         try:
             #run the divide command (with only 1 value)
-            calc.command_n()
-            #get the value printed
+            try:
+                calc.command_n()
+            except Exception:
+                pass
+                #get the value printed
             printed = out.getvalue()
         finally:
             #restore stdout
@@ -310,46 +331,90 @@ class test_minidc(unittest.TestCase):
 
         try:
             #run the divide command (with only 1 value)
-            calc.command_f()
-            #get the value printed
+            try:
+                calc.command_f()
+            except Exception:
+                pass
+                #get the value printed
             printed = out.getvalue()
         finally:
             #restore stdout
             sys.stderr = stderr_temp
         self.assertEqual(printed, 'Error: empty stack\n')
 
-    # #test the execute_line command with valid domain logic
-    # #numbers, negative numbers and arithmetic operations
-    # def test_execute_line_domain_correct_1(self):
-    #     #create a calculator
-    #     calc = minidc()
-    #     #execute a line
-    #     calc.execute_line('_5 3 4 6 1 + * - /')
-    #     #check to make sure there is only one number on the stack
-    #     self.assertEqual(len(calc.nums), 1)
-    #     #check to make sure the value is 0.2
-    #     self.assertEqual(calc.nums.pop(), 0.2)
-    #
-    # #tests to make sure command_f, command_p and command_n are processed properly
-    # def test_execute_line_domain_correct_2(self):
-    #     #create a calculator
-    #     calc = minidc()
-    #     #redirect stdout to something we can read
-    #     stdout_temp = sys.stdout
-    #     out = StringIO.StringIO()
-    #     sys.stdout = out
-    #
-    #     try:
-    #         #run a command (including command_f, command_p and command_n
-    #         calc.execute_line('5.2 _3 f n p')
-    #         #get the value printed
-    #         printed = out.getvalue()
-    #     finally:
-    #         #restore stdout
-    #         sys.stdout = stdout_temp
-    #     self.assertEqual(printed, '-3 5.2 \n-3\n5.2\n')
-    #     self.assertEqual(len(calc.nums), 1)
+    #test the execute_line command with valid input logic
+    #numbers, decimal numbers and arithmetic operations
+    def test_execute_line_input_correct_1(self):
+        #create a calculator
+        calc = minidc()
+        #execute a line
+        calc.execute_line('5.2 3+4 6 .5*-/')
+        #check to make sure there is only one number on the stack
+        self.assertEqual(len(calc.nums), 1)
+        #check to make sure the value is 8.2
+        self.assertEqual(calc.nums.pop(), 8.2)
 
+    #tests to make sure negatives, command_f, command_p and command_n are processed properly
+    def test_execute_line_input_correct_2(self):
+        #create a calculator
+        calc = minidc()
+        #redirect stdout to something we can read
+        stdout_temp = sys.stdout
+        out = StringIO.StringIO()
+        sys.stdout = out
+
+        try:
+            #run a command (including negatives, command_f, command_p and command_n)
+            calc.execute_line('5.2_3.1fnp')
+            #get the value printed
+            printed = out.getvalue()
+        finally:
+            #restore stdout
+            sys.stdout = stdout_temp
+        self.assertEqual(printed, '-3.1 5.2 \n-3.1\n5.2\n')
+        self.assertEqual(len(calc.nums), 1)
+
+    #tests to make sure negative special cases are processed properly
+    def test_execute_line_input_correct_3(self):
+        #create a calculator
+        calc = minidc()
+        #redirect stdout to something we can read
+        stdout_temp = sys.stdout
+        out = StringIO.StringIO()
+        sys.stdout = out
+
+        try:
+            #run a command (including negatives, command_f, command_p and command_n)
+            calc.execute_line('__.f')
+            #get the value printed
+            printed = out.getvalue()
+        finally:
+            #restore stdout
+            sys.stdout = stdout_temp
+        self.assertEqual(printed, '0 0 \n')
+        self.assertEqual(len(calc.nums), 2)
+
+    #test to make sure improper commands are caught
+    def test_execute_line_input_incorrect_1(self):
+        #create a calculator
+        calc = minidc()
+        #redirect stderr to something we can read
+        stderr_temp = sys.stdout
+        out = StringIO.StringIO()
+        sys.stderr = out
+
+        try:
+            #run a command (including command_f, command_p and command_n
+            try:
+                calc.execute_line('3 4phy')
+            except Exception:
+                pass
+            #get the value printed
+            printed = out.getvalue()
+        finally:
+            #restore stderr
+            sys.stderr = stderr_temp
+        self.assertEqual(printed, 'Error: \'h\': Not a valid operation\n')
 
 
 

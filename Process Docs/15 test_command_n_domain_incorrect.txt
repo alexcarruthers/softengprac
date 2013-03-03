@@ -10,7 +10,10 @@ Here's the failing test:
 
         try:
             #run the divide command (with only 1 value)
-            calc.command_n()
+            try:
+                calc.command_n()
+            except Exception:
+                pass
             #get the value printed
             printed = out.getvalue()
         finally:
@@ -51,7 +54,7 @@ Here's the code that passes the test:
     def command_n(self):
         if len(self.nums) == 0:
             sys.stderr.write('Error: empty stack\n')
-            return
+            raise Exception
         print '{0:g}'.format(float(self.nums.pop()))
 Here's the test passing:
     test_add_domain_correct (__main__.test_minidc) ... ok

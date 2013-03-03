@@ -1,4 +1,7 @@
 import sys
+import re
+
+
 class minidc:
     def __init__(self):
         self.nums = []
@@ -15,6 +18,7 @@ class minidc:
         #make sure there are at least two numbers on the stack
         if len(self.nums) < 2:
             sys.stderr.write('Error: not enough values to add\n')
+            raise ArithmeticError
         else:
             #pop the first number off the stack
             num1 = self.nums.pop()
@@ -30,6 +34,7 @@ class minidc:
         #make sure there are at least two numbers on the stack
         if len(self.nums) < 2:
             sys.stderr.write('Error: not enough values to subtract\n')
+            raise ArithmeticError
         else:
             #pop the first number off the stack
             num1 = self.nums.pop()
@@ -45,6 +50,7 @@ class minidc:
         #make sure there are at least two numbers on the stack
         if len(self.nums) < 2:
             sys.stderr.write('Error: not enough values to multiply\n')
+            raise ArithmeticError
         else:
             #pop the first number off the stack
             num1 = self.nums.pop()
@@ -60,13 +66,14 @@ class minidc:
         #make sure there are at least two numbers on the stack
         if len(self.nums) < 2:
             sys.stderr.write('Error: not enough values to divide\n')
+            raise ArithmeticError
         else:
             #pop the first number off the stack
             num1 = self.nums.pop()
             if num1 == 0:
                 sys.stderr.write('Error: divide by 0\n')
-                return
-            #pop the second number off the stack
+                raise ArithmeticError
+                #pop the second number off the stack
             num2 = self.nums.pop()
             #divide num2 by num1 and push the result back onto the stack
             self.nums.append(num2 / num1)
@@ -75,8 +82,8 @@ class minidc:
     def command_p(self):
         if len(self.nums) == 0:
             sys.stderr.write('Error: empty stack\n')
-            return
-        #pop the top number off the stack
+            raise Exception
+            #pop the top number off the stack
         topnum = self.nums.pop()
         #push it back onto the stack
         self.nums.append(topnum)
@@ -87,19 +94,19 @@ class minidc:
     def command_n(self):
         if len(self.nums) == 0:
             sys.stderr.write('Error: empty stack\n')
-            return
+            raise Exception
         print '{0:g}'.format(float(self.nums.pop()))
 
     #prints the entire stack without altering it, stripping trailing zeroes
     def command_f(self):
         if len(self.nums) == 0:
             sys.stderr.write('Error: empty stack\n')
-            return
+            raise Exception
         for num in reversed(self.nums):
             sys.stdout.write('{0:g}'.format(float(num)) + ' ')
         sys.stdout.write('\n')
 
-    #takes a line of commands and executes them
+    # take a line of commands and execute them
     def execute_line(self, line):
         #small function to check if a string is a number (int or float)
         def is_number(s):
@@ -108,8 +115,10 @@ class minidc:
             except ValueError:
                 return False
             return True
-        line = line.split(' ')
-        for i in line:
+
+        #split the line based on the expressions that constitute numbers and commands
+        splitline = filter(lambda x: x.strip(), re.split("(\s|\+|\-|\*|/|_?\d*\.?\d+|[a-zA-Z]|_\.|_)", line))
+        for i in splitline:
             if i == '+':
                 self.add()
             elif i == '-':
@@ -124,10 +133,19 @@ class minidc:
                 self.command_f()
             elif i == 'p':
                 self.command_p()
-            elif is_number(i):
-                self.push_number(float(i))
             elif i[0] == '_' and is_number(i[1:]):
                 self.push_number(float('-' + i[1:]))
+            elif is_number(i):
+                self.push_number(float(i))
+            #special cases that result in 0
+            elif i == '_' or i == '_.':
+                self.push_number(0)
+            else:
+                sys.stderr.write('Error: \'' + i + '\': Not a valid operation\n')
+                raise Exception
+
 
     def run(self):
         pass
+
+

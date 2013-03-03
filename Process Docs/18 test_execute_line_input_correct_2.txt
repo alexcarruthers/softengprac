@@ -1,0 +1,102 @@
+Here's the failing test:
+	#tests to make sure negatives, command_f, command_p and command_n are processed properly
+    def test_execute_line_input_correct_2(self):
+        #create a calculator
+        calc = minidc()
+        #redirect stdout to something we can read
+        stdout_temp = sys.stdout
+        out = StringIO.StringIO()
+        sys.stdout = out
+
+        try:
+            #run a command (including negatives, command_f, command_p and command_n)
+            calc.execute_line('5.2_3fnp')
+            #get the value printed
+            printed = out.getvalue()
+        finally:
+            #restore stdout
+            sys.stdout = stdout_temp
+        self.assertEqual(printed, '-3 5.2 \n-3\n5.2\n')
+        self.assertEqual(len(calc.nums), 1)
+Here's the test failing:
+	test_add_domain_correct (__main__.test_minidc) ... ok
+	test_add_domain_incorrect (__main__.test_minidc) ... ok
+	test_command_f_domain_correct (__main__.test_minidc) ... ok
+	test_command_f_domain_incorrect (__main__.test_minidc) ... ok
+	test_command_n_domain_correct (__main__.test_minidc) ... ok
+	test_command_n_domain_incorrect (__main__.test_minidc) ... ok
+	test_command_p_domain_correct (__main__.test_minidc) ... ok
+	test_command_p_domain_incorrect (__main__.test_minidc) ... ok
+	test_divide_domain_correct (__main__.test_minidc) ... ok
+	test_divide_domain_incorrect_1 (__main__.test_minidc) ... ok
+	test_divide_domain_incorrect_2 (__main__.test_minidc) ... ok
+	test_execute_line_input_correct_1 (__main__.test_minidc) ... ok
+	test_execute_line_input_correct_2 (__main__.test_minidc) ... FAIL
+	test_multiply_domain_correct (__main__.test_minidc) ... ok
+	test_multiply_domain_incorrect (__main__.test_minidc) ... ok
+	test_push_number_domain_correct (__main__.test_minidc) ... ok
+	test_subtract_domain_correct (__main__.test_minidc) ... ok
+	test_subtract_domain_incorrect (__main__.test_minidc) ... ok
+	======================================================================
+	FAIL: test_execute_line_input_correct_2 (__main__.test_minidc)
+	----------------------------------------------------------------------
+	Traceback (most recent call last):
+	  File "/home/alex/Programming/softengprac/test_minidc.py", line 350, in test_execute_line_input_correct_2
+	    self.assertEqual(printed, '-3 5.2 \n-3\n5.2\n')
+	AssertionError: '' != '-3 5.2 \n-3\n5.2\n'
+	----------------------------------------------------------------------
+	Ran 18 tests in 0.002s
+	FAILED (failures=1)
+Here's the code that passes the test:
+	# take a line of commands and execute them
+    def execute_line(self, line):
+        #small function to check if a string is a number (int or float)
+        def is_number(s):
+            try:
+                float(s)
+            except ValueError:
+                return False
+            return True
+        #split the line based on the expressions that constitute numbers and commands
+        splitline = filter(lambda x: x.strip(), re.split("(\s|\+|\-|\*|/|_?\d*\.?\d+|f|n|p)", line))
+        for i in splitline:
+            if i == '+':
+                self.add()
+            elif i == '-':
+                self.subtract()
+            elif i == '*':
+                self.multiply()
+            elif i == '/':
+                self.divide()
+            elif i == 'n':
+                self.command_n()
+            elif i == 'f':
+                self.command_f()
+            elif i == 'p':
+                self.command_p()
+            elif i[0] == '_' and is_number(i[1:]):
+                self.push_number(float('-' + i[1:]))
+            elif is_number(i):
+                self.push_number(float(i))
+Here's the test passing:
+	test_add_domain_correct (__main__.test_minidc) ... ok
+	test_add_domain_incorrect (__main__.test_minidc) ... ok
+	test_command_f_domain_correct (__main__.test_minidc) ... ok
+	test_command_f_domain_incorrect (__main__.test_minidc) ... ok
+	test_command_n_domain_correct (__main__.test_minidc) ... ok
+	test_command_n_domain_incorrect (__main__.test_minidc) ... ok
+	test_command_p_domain_correct (__main__.test_minidc) ... ok
+	test_command_p_domain_incorrect (__main__.test_minidc) ... ok
+	test_divide_domain_correct (__main__.test_minidc) ... ok
+	test_divide_domain_incorrect_1 (__main__.test_minidc) ... ok
+	test_divide_domain_incorrect_2 (__main__.test_minidc) ... ok
+	test_execute_line_input_correct_1 (__main__.test_minidc) ... ok
+	test_execute_line_input_correct_2 (__main__.test_minidc) ... ok
+	test_multiply_domain_correct (__main__.test_minidc) ... ok
+	test_multiply_domain_incorrect (__main__.test_minidc) ... ok
+	test_push_number_domain_correct (__main__.test_minidc) ... ok
+	test_subtract_domain_correct (__main__.test_minidc) ... ok
+	test_subtract_domain_incorrect (__main__.test_minidc) ... ok
+	----------------------------------------------------------------------
+	Ran 18 tests in 0.002s
+	OK
