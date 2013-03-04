@@ -1,0 +1,104 @@
+Here's the failing test:
+	#Tests the run command with invalid parameters and numbers.
+    def test_run_parameters_numbers_incorrect_1(self):
+        #create a calculator
+        calc = minidc()
+        #redirect stdout to something we can read
+        stdout_temp = sys.stdout
+        out = StringIO.StringIO()
+        sys.stdout = out
+
+        #redirect stderr to something we can read
+        stderr_temp = sys.stderr
+        err = StringIO.StringIO()
+        sys.stderr = err
+
+        try:
+            #run a bunch of valid commands
+            commands = StringIO.StringIO('p\n3+\nq\n')
+            calc.run(commands=commands.readline)
+            #get the value printed
+            outprinted = out.getvalue()
+            errprinted = err.getvalue()
+        finally:
+            #restore stdout
+            sys.stdout = stdout_temp
+        self.assertEqual(outprinted, "$ \n$ \n$ ")
+        self.assertEqual(errprinted, "Error: empty stack\nError: not enough values to add\n")
+Here's the Test Failing:
+	test_add_domain_correct (__main__.test_minidc) ... ok
+	test_add_domain_incorrect (__main__.test_minidc) ... ok
+	test_command_f_domain_correct (__main__.test_minidc) ... ok
+	test_command_f_domain_incorrect (__main__.test_minidc) ... ok
+	test_command_n_domain_correct (__main__.test_minidc) ... ok
+	test_command_n_domain_incorrect (__main__.test_minidc) ... ok
+	test_command_p_domain_correct (__main__.test_minidc) ... ok
+	test_command_p_domain_incorrect (__main__.test_minidc) ... ok
+	test_divide_domain_correct (__main__.test_minidc) ... ok
+	test_divide_domain_incorrect_1 (__main__.test_minidc) ... ok
+	test_divide_domain_incorrect_2 (__main__.test_minidc) ... ok
+	test_execute_line_input_correct_1 (__main__.test_minidc) ... ok
+	test_execute_line_input_correct_2 (__main__.test_minidc) ... ok
+	test_execute_line_input_correct_3 (__main__.test_minidc) ... ok
+	test_execute_line_input_incorrect_1 (__main__.test_minidc) ... ok
+	test_multiply_domain_correct (__main__.test_minidc) ... ok
+	test_multiply_domain_incorrect (__main__.test_minidc) ... ok
+	test_push_number_domain_correct (__main__.test_minidc) ... ok
+	test_run_parameters_numbers_correct_1 (__main__.test_minidc) ... ok
+	test_run_parameters_numbers_incorrect_1 (__main__.test_minidc) ... ERROR
+	test_subtract_domain_correct (__main__.test_minidc) ... ok
+	test_subtract_domain_incorrect (__main__.test_minidc) ... ok
+	======================================================================
+	ERROR: test_run_parameters_numbers_incorrect_1 (__main__.test_minidc)
+	----------------------------------------------------------------------
+	Traceback (most recent call last):
+	  File "/home/alex/Programming/softengprac/test_minidc.py", line 455, in test_run_parameters_numbers_incorrect_1
+	    calc.run(commands=commands.readline)
+	  File "/home/alex/Programming/softengprac/minidc.py", line 153, in run
+	    self.execute_line(instruction)
+	  File "/home/alex/Programming/softengprac/minidc.py", line 135, in execute_line
+	    self.command_p()
+	  File "/home/alex/Programming/softengprac/minidc.py", line 85, in command_p
+	    raise Exception
+	Exception
+	----------------------------------------------------------------------
+	Ran 22 tests in 0.002s
+	FAILED (errors=1)
+Here's the code that passes the test:
+	#continually run commands until q (for quit) is entered
+    def run(self, commands=sys.stdin.readline):
+        sys.stdout.write('$ ')
+        instruction = commands()
+        while instruction != 'q\n':
+            try:
+                self.execute_line(instruction)
+            except (ArithmeticError, Exception):
+                sys.stdout.write('\n')
+            sys.stdout.write('$ ')
+            instruction = commands()
+Here's the test passing:
+	test_add_domain_correct (__main__.test_minidc) ... ok
+	test_add_domain_incorrect (__main__.test_minidc) ... ok
+	test_command_f_domain_correct (__main__.test_minidc) ... ok
+	test_command_f_domain_incorrect (__main__.test_minidc) ... ok
+	test_command_n_domain_correct (__main__.test_minidc) ... ok
+	test_command_n_domain_incorrect (__main__.test_minidc) ... ok
+	test_command_p_domain_correct (__main__.test_minidc) ... ok
+	test_command_p_domain_incorrect (__main__.test_minidc) ... ok
+	test_divide_domain_correct (__main__.test_minidc) ... ok
+	test_divide_domain_incorrect_1 (__main__.test_minidc) ... ok
+	test_divide_domain_incorrect_2 (__main__.test_minidc) ... ok
+	test_execute_line_input_correct_1 (__main__.test_minidc) ... ok
+	test_execute_line_input_correct_2 (__main__.test_minidc) ... ok
+	test_execute_line_input_correct_3 (__main__.test_minidc) ... ok
+	test_execute_line_input_incorrect_1 (__main__.test_minidc) ... ok
+	test_multiply_domain_correct (__main__.test_minidc) ... ok
+	test_multiply_domain_incorrect (__main__.test_minidc) ... ok
+	test_push_number_domain_correct (__main__.test_minidc) ... ok
+	test_run_parameters_numbers_correct_1 (__main__.test_minidc) ... ok
+	test_run_parameters_numbers_incorrect_1 (__main__.test_minidc) ... ok
+	test_subtract_domain_correct (__main__.test_minidc) ... ok
+	test_subtract_domain_incorrect (__main__.test_minidc) ... ok
+	----------------------------------------------------------------------
+	Ran 22 tests in 0.002s
+	OK

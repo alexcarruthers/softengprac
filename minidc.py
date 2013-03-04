@@ -144,8 +144,15 @@ class minidc:
                 sys.stderr.write('Error: \'' + i + '\': Not a valid operation\n')
                 raise Exception
 
-
-    def run(self):
-        pass
-
+    #continually run commands until q (for quit) is entered
+    def run(self, commands=sys.stdin.readline):
+        sys.stdout.write('$ ')
+        instruction = commands()
+        while instruction != 'q\n':
+            try:
+                self.execute_line(instruction)
+            except (ArithmeticError, Exception):
+                sys.stdout.write('\n')
+            sys.stdout.write('$ ')
+            instruction = commands()
 

@@ -416,6 +416,52 @@ class test_minidc(unittest.TestCase):
             sys.stderr = stderr_temp
         self.assertEqual(printed, 'Error: \'h\': Not a valid operation\n')
 
+    #Tests the run command with valid parameters and numbers. Also makes it quit
+    def test_run_parameters_numbers_correct_1(self):
+        #create a calculator
+        calc = minidc()
+        #redirect stdout to something we can read
+        stdout_temp = sys.stdout
+        out = StringIO.StringIO()
+        sys.stdout = out
+
+        try:
+            #run a bunch of valid commands
+            commands = StringIO.StringIO('3 4+p\nq\n')
+            calc.run(commands=commands.readline)
+            #get the value printed
+            printed = out.getvalue()
+        finally:
+            #restore stdout
+            sys.stdout = stdout_temp
+        self.assertEqual(printed, "$ 7\n$ ")
+
+    #Tests the run command with invalid parameters and numbers.
+    def test_run_parameters_numbers_incorrect_1(self):
+        #create a calculator
+        calc = minidc()
+        #redirect stdout to something we can read
+        stdout_temp = sys.stdout
+        out = StringIO.StringIO()
+        sys.stdout = out
+
+        #redirect stderr to something we can read
+        stderr_temp = sys.stderr
+        err = StringIO.StringIO()
+        sys.stderr = err
+
+        try:
+            #run a bunch of valid commands
+            commands = StringIO.StringIO('p\n3+\nq\n')
+            calc.run(commands=commands.readline)
+            #get the value printed
+            outprinted = out.getvalue()
+            errprinted = err.getvalue()
+        finally:
+            #restore stdout
+            sys.stdout = stdout_temp
+        self.assertEqual(outprinted, "$ \n$ \n$ ")
+        self.assertEqual(errprinted, "Error: empty stack\nError: not enough values to add\n")
 
 
 unittest.TextTestRunner(verbosity=2).run(unittest.TestLoader().loadTestsFromTestCase(test_minidc))
